@@ -1,0 +1,42 @@
+--!strict
+-- Services
+-- Packages
+-- Modules
+local CONFIG = require("./CONFIG")
+-- Types
+-- Constants
+-- Variables
+-- References
+-- Private Functions
+-- Class
+local interface: {
+	spawn: (fnOrThread: thread | () -> ()) -> thread,
+	defer: (fnOrThread: thread | () -> ()) -> thread,
+	delay: (delay: number, fnOrThread: thread | () -> ()) -> thread,
+	wait: (duration: number) -> number,
+	cancel: (thread: thread) -> (),
+}
+
+if CONFIG.IS_LUNE_ENV then
+	local lunetask = require("@lune/task")
+
+	interface = {
+		spawn = lunetask.spawn,
+		defer = lunetask.defer,
+		delay = lunetask.delay,
+		wait = lunetask.wait,
+		cancel = lunetask.cancel,
+	}
+elseif CONFIG.IS_RBX_ENV then
+	interface = {
+		spawn = task.spawn,
+		defer = task.defer,
+		delay = task.delay,
+		wait = task.wait,
+		cancel = task.cancel,
+	}
+else
+	error("Unsupported environment")
+end
+
+return interface
