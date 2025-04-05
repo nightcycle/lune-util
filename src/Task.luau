@@ -21,11 +21,11 @@ if CONFIG.IS_LUNE_ENV then
 	local lunetask = require("@lune/task")
 
 	interface = {
-		spawn = lunetask.spawn,
-		defer = lunetask.defer,
-		delay = lunetask.delay,
-		wait = lunetask.wait,
-		cancel = lunetask.cancel,
+		spawn = lunetask.spawn :: any,
+		defer = lunetask.defer :: any,
+		delay = lunetask.delay :: any,
+		wait = lunetask.wait :: any,
+		cancel = lunetask.cancel :: any,
 	}
 elseif CONFIG.IS_RBX_ENV then
 	interface = {
