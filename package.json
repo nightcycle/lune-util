@@ -13,7 +13,7 @@
 		"prepare": "npmluau"
 	},
 	"devDependencies": {
-		"npmluau": "^0.1.1"
+		"npmluau": "^0.1.2"
 	},
 	"keywords": [
 		"luau"
