@@ -29,11 +29,11 @@ if CONFIG.IS_LUNE_ENV then
 	}
 elseif CONFIG.IS_RBX_ENV then
 	interface = {
-		spawn = task.spawn,
-		defer = task.defer,
-		delay = task.delay,
-		wait = task.wait,
-		cancel = task.cancel,
+		spawn = task.spawn :: any,
+		defer = task.defer :: any,
+		delay = task.delay :: any,
+		wait = task.wait :: any,
+		cancel = task.cancel :: any,
 	}
 else
 	error("Unsupported environment")
