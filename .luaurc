@@ -6,6 +6,7 @@
 	},
 	"aliases": {
 		"wally": "./Packages",
-		"proj": "./src"
+		"proj": "./src",
+		"lune": "~/.lune/.typedefs/0.8.9/"
 	}
 }
