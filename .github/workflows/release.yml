@@ -124,6 +124,9 @@ jobs:
       - name: Install packages
         run: npm ci
 
+      - name: install lune
+        run: lune setup
+
       - name: build validate project
         run: sh scripts/validate.sh "${{env.ROJO_CONFIG}}"
 
