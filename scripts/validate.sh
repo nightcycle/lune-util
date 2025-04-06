@@ -1,16 +1,10 @@
 #!/bin/sh
 set -e
-ROJO_CONFIG=$1
-# if ROJO_CONFIG = "" then error
-if [ -z "$ROJO_CONFIG" ]; then
-	echo "ROJO_CONFIG is not set"
-	exit 1
-fi
 sh scripts/download-types.sh
-sh scripts/build.sh "$ROJO_CONFIG"
+sh scripts/build.sh "$1"
 cd "build"
 luau-lsp analyze \
-	--sourcemap="sourcemap.json" \
+	--sourcemap="darklua-sourcemap.json" \
 	--ignore="**/Packages/**" \
 	--ignore="Packages/**" \
 	--ignore="*.spec.luau" \

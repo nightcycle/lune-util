@@ -4,7 +4,7 @@
 		"$className": "DataModel",
 		"ReplicatedStorage": {
 			"package": {
-				"$path": "src"
+				"$path": "model.project.json"
 			}
 		}
 	}

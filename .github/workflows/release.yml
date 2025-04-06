@@ -45,7 +45,7 @@ jobs:
     needs: get_published_release
     runs-on: windows-latest
     env:
-      ROJO_CONFIG: "wally.project.json"
+      ROJO_CONFIG: "dev.project.json"
       RBXL_FILE: "build/Package.rbxl"
     steps:
       # Checkout your Git repo
@@ -55,15 +55,16 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: install lune
-        run: lune setup
+      - name: install wally packages
+        run: sh scripts/wally-install.sh "dev.project.json"
 
       - name: build validate project
-        run: sh scripts/validate.sh "${{env.ROJO_CONFIG}}"
+        run: sh scripts/validate.sh --wally
 
       - name: Update version and labels
         shell: bash
         run: |
+          cd build
           repo_owner="${{needs.get_published_release.outputs.repo_owner_name}}"
           repo_name="${{needs.get_published_release.outputs.repo_name}}"
           repo_desc=${{needs.get_published_release.outputs.repo_desc}}
@@ -84,15 +85,15 @@ jobs:
       - name: publish package
         shell: bash
         run: |
+          cd build
           wally login --token "${{secrets.WALLY_OAUTH}}"
-          cp "$ROJO_CONFIG" "default.project.json"
           wally publish
 
   publish_to_npm:
     needs: get_published_release
     runs-on: windows-latest
     env:
-      ROJO_CONFIG: "npm.project.json"
+      ROJO_CONFIG: "dev.project.json"
     steps:
       # Checkout your Git repo
       - uses: actions/checkout@v4
@@ -121,14 +122,11 @@ jobs:
             cache: npm
             cache-dependency-path: package-lock.json
 
-      - name: Install packages
-        run: npm ci
-
-      - name: install lune
-        run: lune setup
+      - name: install node packages
+        run: sh scripts/npm-install.sh
 
       - name: build validate project
-        run: sh scripts/validate.sh "${{env.ROJO_CONFIG}}"
+        run: sh scripts/validate.sh
 
       - name: publish package
         run: npm publish --access public

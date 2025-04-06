@@ -1,7 +1,7 @@
 {
 	"name": "@nightcycle/lune-util",
-	"version": "1.0.0",
-	"description": "A wrapper for stateful services",
+	"version": "1.0.2",
+	"description": "a package",
 	"license": "Apache-2.0",
 	"author": "nightcycle <coyer@nightcycle.us>",
 	"repository": {
@@ -12,14 +12,11 @@
 	"scripts": {
 		"prepare": "npmluau"
 	},
+	"dependencies": {},
 	"devDependencies": {
-		"npmluau": "^0.1.2"
+		"npmluau": "^0.1.1"
 	},
 	"keywords": [
 		"luau"
-	],
-	"bugs": {
-		"url": "https://github.com/nightcycle/lune-util/issues"
-	},
-	"homepage": "https://github.com/nightcycle/lune-util#readme"
+	]
 }
