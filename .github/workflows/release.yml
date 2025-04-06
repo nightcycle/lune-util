@@ -55,6 +55,9 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: install lune
+        run: lune setup
+
       - name: install wally packages
         run: sh scripts/wally-install.sh "dev.project.json"
 
@@ -124,6 +127,9 @@ jobs:
 
       - name: install node packages
         run: sh scripts/npm-install.sh
+
+      - name: install lune
+        run: lune setup
 
       - name: build validate project
         run: sh scripts/validate.sh

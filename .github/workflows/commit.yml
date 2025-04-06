@@ -20,10 +20,13 @@ jobs:
       ROJO_CONFIG: "dev.project.json"
     steps:
       - uses: actions/checkout@v2
-      
+
       - uses: ok-nick/setup-aftman@v0.4.2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: install lune
+        run: lune setup
 
       - name: install wally
         run: sh scripts/wally-install.sh "${{env.ROJO_CONFIG}}"
