@@ -13,7 +13,7 @@ local interface: {
 	spawn: (fnOrThread: thread | () -> ()) -> thread,
 	defer: (fnOrThread: thread | () -> ()) -> thread,
 	delay: (delay: number, fnOrThread: thread | () -> ()) -> thread,
-	wait: (duration: number) -> number,
+	wait: (duration: number?) -> number,
 	cancel: (thread: thread) -> (),
 }
 
