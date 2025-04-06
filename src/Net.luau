@@ -4,7 +4,7 @@
 -- Modules
 local CONFIG = require("./CONFIG")
 -- Types
-type FetchParams = {
+export type FetchParams = {
 	url: string,
 	method: ("GET" | "POST" | "PATCH" | "PUT" | "DELETE")?,
 	body: any?,
@@ -14,7 +14,7 @@ type FetchParams = {
 		decompress: boolean?,
 	}?,
 }
-type FetchResponse = {
+export type FetchResponse = {
 	ok: boolean,
 	statusCode: number,
 	statusMessage: string,
