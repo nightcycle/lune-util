@@ -5,6 +5,7 @@
 local DateTime = require("./DateTime")
 local Net = require("./Net")
 local Task = require("./Task")
+local CONFIG = require("./CONFIG")
 -- Types
 export type CompatDateTime = DateTime.CompatDateTime
 export type FetchParams = Net.FetchParams
@@ -15,8 +16,10 @@ export type FetchResponse = Net.FetchResponse
 -- References
 -- Private Functions
 -- Class
-return {
+return table.freeze({
+	IS_LUNE_ENV = CONFIG.IS_LUNE_ENV,
+	IS_RBX_ENV = CONFIG.IS_RBX_ENV,
 	Task = Task,
 	Net = Net,
 	DateTime = DateTime,
-}
+})
