@@ -25,11 +25,8 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: install lune
-        run: lune setup
-
       - name: install wally
         run: sh scripts/wally-install.sh "${{env.ROJO_CONFIG}}"
 
       - name: validate project
-        run: sh scripts/validate.sh "${{env.ROJO_CONFIG}}"
+        run: sh scripts/validate.sh "${{env.ROJO_CONFIG}}" --wally

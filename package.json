@@ -12,7 +12,10 @@
 	"scripts": {
 		"prepare": "npmluau"
 	},
-	"dependencies": {},
+	"dependencies": {
+		"@nightcycle/option": "^0",
+		"@nightcycle/error": "^0"
+	},
 	"devDependencies": {
 		"npmluau": "^0.1.1"
 	},

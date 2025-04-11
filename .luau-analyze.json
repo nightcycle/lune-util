@@ -1,8 +1,7 @@
 {
 	"luau-lsp.require.mode": "relativeToFile",
 	"luau-lsp.require.directoryAliases": {
-		"@wally": "Packages",
-		"@proj": "src",
+		"@pkg": "Packages",
 		"@lune": "~/.lune/.typedefs/0.8.9/"
 	},
 	"luau-lsp.diagnostics.strictDatamodelTypes": true,

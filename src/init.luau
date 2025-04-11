@@ -22,4 +22,5 @@ return table.freeze({
 	Task = Task,
 	Net = Net,
 	DateTime = DateTime,
+	Env = require("./Env"),
 })
