@@ -58,6 +58,9 @@ jobs:
       - name: install wally packages
         run: sh scripts/wally-install.sh "dev.project.json"
 
+      - name: install lune
+        run: lune setup
+
       - name: build validate project
         run: sh scripts/validate.sh --wally
 
