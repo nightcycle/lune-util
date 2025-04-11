@@ -125,6 +125,9 @@ jobs:
             cache: npm
             cache-dependency-path: package-lock.json
 
+      - name: install lune
+        run: lune setup
+
       - name: install node packages
         run: sh scripts/npm-install.sh
 
