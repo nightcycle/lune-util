@@ -14,6 +14,7 @@
 	},
 	"dependencies": {
 		"@nightcycle/option": "^0",
+		"@nightcycle/result": "^0",
 		"@nightcycle/error": "^0"
 	},
 	"devDependencies": {

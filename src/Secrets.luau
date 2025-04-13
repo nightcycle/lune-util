@@ -2,7 +2,9 @@
 -- Services
 -- Packages
 local Option = require("@pkg/@nightcycle/option")
+local Result = require("@pkg/@nightcycle/result")
 -- Modules
+local Env = require("./Env")
 local CONFIG = require("./CONFIG")
 -- Types
 type Option<V> = Option.Option<V>
@@ -23,7 +25,6 @@ function SecretMetatable:__tostring()
 end
 
 -- Private Functions
-
 function newCompatSecret(key: string, value: string | Secret): CompatSecret
 	if CONFIG.IS_RBX_ENV then
 		local secret: Secret = value :: any
@@ -70,7 +71,13 @@ return (
 			assert(type(key) == "string", `Key "{key}" must be a string`)
 			if CONFIG.IS_RBX_ENV then
 				local HttpService = game:GetService("HttpService")
-				local secret = HttpService:GetSecret(key)
+				local secret = Result.try(function()
+					return HttpService:GetSecret(key)
+				end):match(function(sec): string | Secret
+					return sec
+				end, function()
+					return Env[key]:expect(`Secret "{key}" not found`)
+				end)
 				return Option.some(newCompatSecret(key, secret))
 			else
 				local Process = require("@lune/process")
