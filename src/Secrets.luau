@@ -7,14 +7,51 @@ local CONFIG = require("./CONFIG")
 -- Types
 type Option<V> = Option.Option<V>
 export type CompatSecret = {
-	AddPrefix: (self: CompatSecret, prefix: string) -> (),
-	AddSuffix: (self: CompatSecret, suffix: string) -> (),
+	AddPrefix: (self: CompatSecret, prefix: string) -> CompatSecret,
+	AddSuffix: (self: CompatSecret, suffix: string) -> CompatSecret,
 	Build: (self: CompatSecret) -> string | Secret,
 }
 -- Constants
 -- Variables
 -- References
 -- Private Functions
+function newCompatSecret(key: string, value: string | Secret): CompatSecret
+	if CONFIG.IS_RBX_ENV then
+		local secret: Secret = value :: any
+		local compat: CompatSecret = {
+			AddPrefix = function(self: CompatSecret, prefix: string)
+				assert(type(prefix) == "string", `Prefix "{prefix}" must be a string`)
+				return newCompatSecret(key, secret:AddPrefix(prefix))
+			end,
+			AddSuffix = function(self: CompatSecret, suffix: string)
+				assert(type(suffix) == "string", `Suffix "{suffix}" must be a string`)
+				return newCompatSecret(key, secret:AddSuffix(suffix))
+			end,
+			Build = function(self: CompatSecret): string | Secret
+				return secret
+			end,
+		}
+		table.freeze(compat)
+		return compat
+	else
+		local secret: string = value :: any
+		local compat: CompatSecret = {
+			AddPrefix = function(self: CompatSecret, prefix: string)
+				assert(type(prefix) == "string", `Prefix "{prefix}" must be a string`)
+				return newCompatSecret(key, prefix .. secret)
+			end,
+			AddSuffix = function(self: CompatSecret, suffix: string)
+				assert(type(suffix) == "string", `Suffix "{suffix}" must be a string`)
+				return newCompatSecret(key, secret .. suffix)
+			end,
+			Build = function(self: CompatSecret): string | Secret
+				return secret
+			end,
+		}
+		table.freeze(compat)
+		return compat
+	end
+end
 -- Class
 return (
 	setmetatable({}, {
@@ -23,21 +60,7 @@ return (
 			if CONFIG.IS_RBX_ENV then
 				local HttpService = game:GetService("HttpService")
 				local secret = HttpService:GetSecret(key)
-				local compat: CompatSecret = {
-					AddPrefix = function(self: CompatSecret, prefix: string)
-						assert(type(prefix) == "string", `Prefix "{prefix}" must be a string`)
-						secret = secret:AddPrefix(prefix)
-					end,
-					AddSuffix = function(self: CompatSecret, suffix: string)
-						assert(type(suffix) == "string", `Suffix "{suffix}" must be a string`)
-						secret = secret:AddSuffix(suffix)
-					end,
-					Build = function(self: CompatSecret): string | Secret
-						return secret
-					end,
-				}
-				table.freeze(compat)
-				return Option.some(compat)
+				return Option.some(newCompatSecret(key, secret))
 			else
 				local Process = require("@lune/process")
 				local secret = Process.env[key]
@@ -48,21 +71,7 @@ return (
 					typeof(secret) == "string",
 					`Value for "{key}" must be a string, got "{typeof(secret)}"`
 				)
-				local compat: CompatSecret = {
-					AddPrefix = function(self: CompatSecret, prefix: string)
-						assert(type(prefix) == "string", `Prefix "{prefix}" must be a string`)
-						secret = prefix .. secret
-					end,
-					AddSuffix = function(self: CompatSecret, suffix: string)
-						assert(type(suffix) == "string", `Suffix "{suffix}" must be a string`)
-						secret = secret .. suffix
-					end,
-					Build = function(self: CompatSecret): string | Secret
-						return secret
-					end,
-				}
-				table.freeze(compat)
-				return Option.some(compat)
+				return Option.some(newCompatSecret(key, secret))
 			end
 		end,
 	}) :: any
