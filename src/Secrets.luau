@@ -71,14 +71,18 @@ return (
 			assert(type(key) == "string", `Key "{key}" must be a string`)
 			if CONFIG.IS_RBX_ENV then
 				local HttpService = game:GetService("HttpService")
-				local secret = Result.try(function()
-					return HttpService:GetSecret(key)
-				end):match(function(sec): string | Secret
+				local secret = Result.try(function(): Option<string | Secret>
+					return Option.some(HttpService:GetSecret(key) :: string | Secret)
+				end):match(function(sec): Option<string | Secret>
 					return sec
 				end, function()
-					return Env[key]:expect(`Secret "{key}" not found`)
+					return Env[key] :: Option<any>
 				end)
-				return Option.some(newCompatSecret(key, secret))
+				return secret:match(function(sec): Option<CompatSecret>
+					return Option.some(newCompatSecret(key, sec))
+				end, function()
+					return Option.none()
+				end)
 			else
 				local Process = require("@lune/process")
 				local secret = Process.env[key]
