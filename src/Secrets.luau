@@ -14,7 +14,16 @@ export type CompatSecret = {
 -- Constants
 -- Variables
 -- References
+-- Class
+local SecretMetatable = {}
+SecretMetatable.__index = SecretMetatable
+
+function SecretMetatable:__tostring()
+	return `CompatSecret<???>`
+end
+
 -- Private Functions
+
 function newCompatSecret(key: string, value: string | Secret): CompatSecret
 	if CONFIG.IS_RBX_ENV then
 		local secret: Secret = value :: any
@@ -31,8 +40,9 @@ function newCompatSecret(key: string, value: string | Secret): CompatSecret
 				return secret
 			end,
 		}
+		setmetatable(compat, SecretMetatable)
 		table.freeze(compat)
-		return compat
+		return compat :: any
 	else
 		local secret: string = value :: any
 		local compat: CompatSecret = {
@@ -48,8 +58,9 @@ function newCompatSecret(key: string, value: string | Secret): CompatSecret
 				return secret
 			end,
 		}
+		setmetatable(compat, SecretMetatable)
 		table.freeze(compat)
-		return compat
+		return compat :: any
 	end
 end
 -- Class

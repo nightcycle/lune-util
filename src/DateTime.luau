@@ -76,6 +76,10 @@ if CONFIG.IS_LUNE_ENV then
 	local CompatDateTimeImpl = {}
 	CompatDateTimeImpl.__index = CompatDateTimeImpl
 
+	function CompatDateTimeImpl:__tostring(): string
+		return `CompatDateTime<{self:formatIsoDate()}>`
+	end
+
 	function CompatDateTimeImpl:formatUniversalTime(format: string, locale: Locale): string
 		return datetime.fromUnixTimestamp(self.unixTimestampMillis / 1000):formatUniversalTime(format, locale)
 	end
@@ -158,6 +162,10 @@ if CONFIG.IS_LUNE_ENV then
 elseif CONFIG.IS_RBX_ENV then
 	local CompatDateTimeImpl = {}
 	CompatDateTimeImpl.__index = CompatDateTimeImpl
+
+	function CompatDateTimeImpl:__tostring(): string
+		return `CompatDateTime<{self:formatIsoDate()}>`
+	end
 
 	function CompatDateTimeImpl:formatUniversalTime(format: string, locale: Locale): string
 		return DateTime.fromUnixTimestampMillis(self.unixTimestampMillis)
