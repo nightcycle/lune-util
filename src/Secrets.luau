@@ -27,15 +27,21 @@ end
 -- Private Functions
 function newCompatSecret(key: string, value: string | Secret): CompatSecret
 	if CONFIG.IS_RBX_ENV then
-		local secret: Secret = value :: any
+		local secret: string | Secret = value :: any
 		local compat: CompatSecret = {
 			AddPrefix = function(self: CompatSecret, prefix: string)
 				assert(type(prefix) == "string", `Prefix "{prefix}" must be a string`)
-				return newCompatSecret(key, secret:AddPrefix(prefix))
+				return newCompatSecret(
+					key,
+					if typeof(secret) == "string" then prefix .. secret else secret:AddPrefix(prefix)
+				)
 			end,
 			AddSuffix = function(self: CompatSecret, suffix: string)
 				assert(type(suffix) == "string", `Suffix "{suffix}" must be a string`)
-				return newCompatSecret(key, secret:AddSuffix(suffix))
+				return newCompatSecret(
+					key,
+					if typeof(secret) == "string" then secret .. suffix else secret:AddSuffix(suffix)
+				)
 			end,
 			Build = function(self: CompatSecret): string | Secret
 				return secret
