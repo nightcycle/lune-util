@@ -56,7 +56,6 @@ if CONFIG.IS_LUNE_ENV then
 		end,
 		generateGUID = function(wrapInCurlyBraces: boolean?): string
 			local function generateGUID(): string
-				math.randomseed(os.time())
 				local function randomHexDigit(): string
 					local digit = math.random(0, 15)
 					return string.format("%x", digit)
