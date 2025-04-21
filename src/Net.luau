@@ -32,6 +32,7 @@ local interface: {
 	jsonEncode: (value: any) -> string,
 	jsonDecode: (value: string) -> any,
 	IS_ENABLED: boolean,
+	generateGUID: () -> string,
 }
 
 if CONFIG.IS_LUNE_ENV then
@@ -52,6 +53,28 @@ if CONFIG.IS_LUNE_ENV then
 				headers = response.headers :: { [string]: string },
 				body = response.body,
 			}
+		end,
+		generateGUID = function(wrapInCurlyBraces: boolean?): string
+			local function generateGUID(): string
+				math.randomseed(os.time())
+				local function randomHexDigit(): string
+					local digit = math.random(0, 15)
+					return string.format("%x", digit)
+				end
+				local parts = {
+					string.rep(randomHexDigit(), 8),
+					string.rep(randomHexDigit(), 4),
+					"4" .. string.rep(randomHexDigit(), 3),
+					string.format("%x", math.random(8, 11)) .. string.rep(randomHexDigit(), 3),
+					string.rep(randomHexDigit(), 12),
+				}
+				return table.concat(parts, "-")
+			end
+			if wrapInCurlyBraces or wrapInCurlyBraces == nil then
+				return "{" .. generateGUID() .. "}"
+			else
+				return generateGUID()
+			end
 		end,
 		jsonEncode = net.jsonEncode,
 		jsonDecode = net.jsonDecode,
@@ -81,6 +104,10 @@ elseif CONFIG.IS_RBX_ENV then
 				headers = response.Headers :: { [string]: string },
 				body = response.Body or "",
 			}
+		end,
+		generateGUID = function(wrapInCurlyBraces: boolean?): string
+			local guid = HttpService:GenerateGUID(wrapInCurlyBraces)
+			return string.sub(guid, 2, -2) -- Remove the curly braces
 		end,
 		jsonEncode = function(value: any): string
 			return HttpService:JSONEncode(value)
