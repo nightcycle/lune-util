@@ -32,7 +32,7 @@ local interface: {
 	jsonEncode: (value: any) -> string,
 	jsonDecode: (value: string) -> any,
 	IS_ENABLED: boolean,
-	generateGUID: () -> string,
+	generateGUID: (wrapInCurlyBraces: boolean?) -> string,
 }
 
 if CONFIG.IS_LUNE_ENV then
