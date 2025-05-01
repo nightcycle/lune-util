@@ -2,7 +2,7 @@
 	"luau-lsp.require.mode": "relativeToFile",
 	"luau-lsp.require.directoryAliases": {
 		"@pkg": "Packages",
-		"@lune": "~/.lune/.typedefs/0.8.9/"
+		"@lune": "~/.lune/.typedefs/0.9.2/"
 	},
 	"luau-lsp.diagnostics.strictDatamodelTypes": true,
 	"luau-lsp.types.robloxSecurityLevel": "LocalUserSecurity",

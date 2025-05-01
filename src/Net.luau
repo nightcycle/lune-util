@@ -37,6 +37,7 @@ local interface: {
 
 if CONFIG.IS_LUNE_ENV then
 	local net = require("@lune/net")
+	local serde = require("@lune/serde")
 
 	interface = {
 		request = function(urlOrParams: string | FetchParams): FetchResponse
@@ -84,8 +85,12 @@ if CONFIG.IS_LUNE_ENV then
 				return generateGUID()
 			end
 		end,
-		jsonEncode = net.jsonEncode,
-		jsonDecode = net.jsonDecode,
+		jsonEncode = function(value: any): string
+			return serde.encode("json", value)
+		end,
+		jsonDecode = function(value: string): any
+			return serde.decode("json", value)
+		end,
 		IS_ENABLED = true,
 	}
 elseif CONFIG.IS_RBX_ENV then

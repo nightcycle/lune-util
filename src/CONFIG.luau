@@ -17,6 +17,7 @@ local IS_LUNE_ENV = (function()
 	end)
 	return success
 end)()
+
 -- Variables
 -- References
 -- Private Functions
