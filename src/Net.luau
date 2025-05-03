@@ -3,6 +3,8 @@
 -- Packages
 -- Modules
 local CONFIG = require("./CONFIG")
+local JsonEncode = require("./JsonEncode")
+
 -- Types
 export type FetchParams = {
 	url: string,
@@ -86,7 +88,7 @@ if CONFIG.IS_LUNE_ENV then
 			end
 		end,
 		jsonEncode = function(value: any): string
-			return serde.encode("json", value)
+			return JsonEncode(value)
 		end,
 		jsonDecode = function(value: string): any
 			return serde.decode("json", value)
@@ -95,6 +97,7 @@ if CONFIG.IS_LUNE_ENV then
 	}
 elseif CONFIG.IS_RBX_ENV then
 	local HttpService = game:GetService("HttpService")
+
 	interface = {
 		request = function(urlOrParams: string | FetchParams): FetchResponse
 			local response
@@ -123,7 +126,7 @@ elseif CONFIG.IS_RBX_ENV then
 			return string.sub(guid, 2, -2) -- Remove the curly braces
 		end,
 		jsonEncode = function(value: any): string
-			return HttpService:JSONEncode(value)
+			return JsonEncode(value)
 		end,
 		jsonDecode = function(value: string): any
 			return HttpService:JSONDecode(value)
