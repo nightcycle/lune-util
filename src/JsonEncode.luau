@@ -88,7 +88,15 @@ local function encode_number(val: number): string
 	if val ~= val or val <= -math.huge or val >= math.huge then
 		error("unexpected number value '" .. tostring(val) .. "'")
 	end
-	return string.format("%.14g", val)
+	if val == math.round(val) then
+		return string.format("%.0f", val)
+	else
+		-- Format with high precision and remove trailing zeros
+		local str = string.format("%.14f", val)
+		-- Remove trailing zeros after decimal point
+		str = str:gsub("%.?0+$", "")
+		return str
+	end
 end
 
 local type_func_map = {
